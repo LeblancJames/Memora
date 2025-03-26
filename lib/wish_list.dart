@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:memora/activity_details.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class WishListPage extends StatefulWidget {
+  const WishListPage({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<WishListPage> createState() => _WishListPageState();
 }
 
-class _HomeState extends State<Home> {
+class _WishListPageState extends State<WishListPage> {
   // List<Activity> items = [];
 
   List<String> items = ['a', 'b', 'c'];

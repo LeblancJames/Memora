@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:memora/home.dart';
+import 'package:memora/visited_page.dart';
+import 'package:memora/wish_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,23 +28,62 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
+  int selectedIndex = 0;
+  final PageController pageController = PageController();
+
+  void onTabTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.ease,
+    );
+  }
+  //swipe functionality
+  // void onPageChanged(int index) {
+  //   setState(() {
+  //     selectedIndex = index;
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.white,
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 22,
+            color: Color(0xFF212121),
+            letterSpacing: 0.5,
+          ),
+        ),
         toolbarHeight: 100,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Home()],
-        ),
+      body: PageView(
+        controller: pageController,
+        // onPageChanged: onPageChanged, //swipe functionality
+        children: const [WishListPage(), VisitedPage()],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: onTabTapped,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Visited'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bookmark),
+            label: 'Wishlist',
+          ),
+        ],
       ),
     );
   }
