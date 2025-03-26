@@ -13,12 +13,12 @@ class _VisitedPageState extends State<VisitedPage> {
   // List<Activity> items = [];
   final TextEditingController searchController = TextEditingController();
   String searchQuery = "";
-  List<String> items = ['a', 'b'];
+  List<String> places = ['a', 'b', 'a', 'c'];
 
   @override
   Widget build(BuildContext context) {
-    final filteredItems =
-        items
+    final filteredPlaces =
+        places
             .where(
               (place) =>
                   place.toLowerCase().contains(searchQuery.toLowerCase()),
@@ -57,7 +57,7 @@ class _VisitedPageState extends State<VisitedPage> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: filteredItems.length,
+            itemCount: filteredPlaces.length,
             itemBuilder: (BuildContext context, int index) {
               return Column(
                 children: [
@@ -75,7 +75,7 @@ class _VisitedPageState extends State<VisitedPage> {
                     },
                     child: Slidable(
                       // Specify a key if the Slidable is dismissible.
-                      key: ValueKey(items[index]),
+                      key: ValueKey(filteredPlaces[index]),
                       // The end action pane is the one at the right or the bottom side.
                       endActionPane: ActionPane(
                         motion: const ScrollMotion(),
@@ -105,7 +105,7 @@ class _VisitedPageState extends State<VisitedPage> {
                         margin: EdgeInsets.all(4),
                         child: Center(
                           child: Text(
-                            items[index],
+                            filteredPlaces[index],
                             style: TextStyle(
                               color: const Color.fromARGB(255, 0, 0, 0),
                             ),
