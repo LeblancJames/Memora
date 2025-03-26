@@ -72,16 +72,34 @@ class MyHomePageState extends State<MyHomePage> {
       body: PageView(
         controller: pageController,
         // onPageChanged: onPageChanged, //swipe functionality
-        children: const [WishListPage(), VisitedPage()],
+        children: const [VisitedPage(), WishListPage()],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        onTap: onTabTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Visited'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark),
-            label: 'Wishlist',
+      bottomNavigationBar: Stack(
+        children: [
+          BottomNavigationBar(
+            currentIndex: selectedIndex,
+            onTap: onTabTapped,
+            selectedItemColor: Color(0xFF4A90E2),
+            unselectedItemColor: Color(0xFFBDBDBD),
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.check),
+                label: 'Visited',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.bookmark),
+                label: 'Wishlist',
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 0,
+            left:
+                MediaQuery.of(context).size.width *
+                (selectedIndex / 2), //positions bar based on index
+            width: MediaQuery.of(context).size.width / 2,
+            height: 5,
+            child: Container(color: Color(0xFF4A90E2)),
           ),
         ],
       ),
