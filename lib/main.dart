@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(scaffoldBackgroundColor: Colors.white),
 
       initialRoute: '/',
-      routes: {'/': (context) => const MyHomePage(title: 'Memora Home Page')},
+      routes: {'/': (context) => const MyHomePage(title: 'Memora')},
     );
   }
 }
@@ -34,7 +34,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.white, title: Text(widget.title)),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text(widget.title),
+        toolbarHeight: 100,
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
