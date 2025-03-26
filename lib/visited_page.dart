@@ -17,6 +17,14 @@ class _VisitedPageState extends State<VisitedPage> {
 
   @override
   Widget build(BuildContext context) {
+    final filteredItems =
+        items
+            .where(
+              (place) =>
+                  place.toLowerCase().contains(searchQuery.toLowerCase()),
+            )
+            .toList();
+
     return Column(
       children: [
         // Search Bar
@@ -49,7 +57,7 @@ class _VisitedPageState extends State<VisitedPage> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: items.length,
+            itemCount: filteredItems.length,
             itemBuilder: (BuildContext context, int index) {
               return Column(
                 children: [
