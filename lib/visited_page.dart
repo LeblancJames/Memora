@@ -28,33 +28,76 @@ class _VisitedPageState extends State<VisitedPage> {
     return Column(
       children: [
         // Search Bar
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 24,
-            right: 112,
-            top: 0,
-            bottom: 16,
-          ),
-          child: TextField(
-            controller: searchController,
-            onChanged: (value) {
-              setState(() {
-                searchQuery = value;
-              });
-            },
-            decoration: InputDecoration(
-              hintText: 'Search places...',
-              prefixIcon: const Icon(Icons.search),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-              filled: true,
-              fillColor: Colors.grey[200],
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(36),
-                borderSide: BorderSide.none,
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 24,
+                  right: 16,
+                  top: 0,
+                  bottom: 16,
+                ),
+                child: TextField(
+                  controller: searchController, //can control the text if needed
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search places...',
+                    prefixIcon: const Icon(Icons.search),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 16,
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(36),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+
+            //sort button
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 12,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.sort),
+                tooltip: 'Sort',
+                onPressed: () {
+                  // TODO: Implement sort logic
+                },
+              ),
+            ),
+            //filter button
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 0,
+                right: 16,
+                top: 0,
+                bottom: 12,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.filter_list),
+                tooltip: 'Filter',
+                onPressed: () {
+                  // TODO: Open filter modal or sheet
+                },
+              ),
+            ),
+          ],
         ),
+
         Expanded(
           child: ListView.builder(
             itemCount: filteredPlaces.length,

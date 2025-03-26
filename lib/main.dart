@@ -67,7 +67,7 @@ class MyHomePageState extends State<MyHomePage> {
             letterSpacing: 0.5,
           ),
         ),
-        toolbarHeight: 100,
+        toolbarHeight: 64,
       ),
       body: PageView(
         controller: pageController,
