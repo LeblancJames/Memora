@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memora/activity_details.dart';
 import 'package:memora/visited_page.dart';
 import 'package:memora/wish_list.dart';
 
@@ -78,7 +79,9 @@ class MyHomePageState extends State<MyHomePage> {
         padding: const EdgeInsets.only(top: 16),
         child: FloatingActionButton(
           onPressed: () {
-            // TODO: navigate to Add screen or open form
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const ActivityDetails()),
+            );
           },
           backgroundColor: const Color(0xFF4A90E2), // your primary blue
           shape: const CircleBorder(),

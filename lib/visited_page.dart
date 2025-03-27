@@ -121,7 +121,7 @@ class _VisitedPageState extends State<VisitedPage> {
                           MaterialPageRoute(
                             builder:
                                 // (context) => Activitydetails(toDoItem: items[index]),
-                                (context) => Activitydetails(),
+                                (context) => ActivityDetails(),
                           ),
                         );
                       },

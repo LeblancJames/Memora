@@ -121,7 +121,7 @@ class _WishListPageState extends State<WishListPage> {
                           MaterialPageRoute(
                             builder:
                                 // (context) => Activitydetails(toDoItem: items[index]),
-                                (context) => Activitydetails(),
+                                (context) => ActivityDetails(),
                           ),
                         );
                       },
