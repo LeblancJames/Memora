@@ -10,8 +10,8 @@ class ActivityDetails extends StatefulWidget {
 class _ActivityDetailsState extends State<ActivityDetails> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
-  int selectedCategoryIndex = 0;
-  int selectedCategoryIndexRowTwo = 0;
+  var selectedCategoryIndex = List<bool>.filled(5, false);
+  var selectedCategoryIndexTwo = List<bool>.filled(5, false);
 
   double rating = 0;
   bool isVisited = false;
@@ -19,7 +19,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
   final List<IconData> categories = [
     Icons.restaurant, // Food & Drink
     Icons.hiking, // Outdoor Adventures
-    Icons.beach_access, // Beach
+    Icons.beach_access, // Shopping
     Icons.theater_comedy, // Entertainment
     Icons.shopping_bag, // Shopping
   ];
@@ -95,14 +95,18 @@ class _ActivityDetailsState extends State<ActivityDetails> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      selectedCategoryIndex = index;
+                      if (selectedCategoryIndex[index] == false) {
+                        selectedCategoryIndex[index] = true;
+                      } else {
+                        selectedCategoryIndex[index] = false;
+                      }
                     });
                   },
                   child: Icon(
                     categories[index],
                     size: 32,
                     color:
-                        selectedCategoryIndex == index
+                        selectedCategoryIndex[index] == true
                             ? Colors.blue
                             : Colors.black,
                   ),
@@ -117,14 +121,18 @@ class _ActivityDetailsState extends State<ActivityDetails> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      selectedCategoryIndexRowTwo = index;
+                      if (selectedCategoryIndexTwo[index] == false) {
+                        selectedCategoryIndexTwo[index] = true;
+                      } else {
+                        selectedCategoryIndexTwo[index] = false;
+                      }
                     });
                   },
                   child: Icon(
                     categoriesSecondRow[index],
                     size: 32,
                     color:
-                        selectedCategoryIndexRowTwo == index
+                        selectedCategoryIndexTwo[index] == true
                             ? Colors.blue
                             : Colors.black,
                   ),
