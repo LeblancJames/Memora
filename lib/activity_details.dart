@@ -31,9 +31,13 @@ class _ActivityDetailsState extends State<ActivityDetails> {
     Icons.photo, // Other
   ];
 
-  void selectRating(double rating) {
+  void selectRating(double index) {
     setState(() {
-      rating = rating;
+      if (rating == index) {
+        rating = 0;
+      } else {
+        rating = index;
+      }
     });
   }
 

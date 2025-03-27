@@ -7,7 +7,8 @@ class Activity {
   final String name;
   final String? location;
   //add photos?
-  //categories?
+  final List<bool> categoriesOne;
+  final List<bool> categoriesTwo;
   final String? notes;
   final Int? rating;
   final bool visited;
@@ -16,6 +17,8 @@ class Activity {
     required this.id,
     required this.name,
     this.location,
+    required this.categoriesOne,
+    required this.categoriesTwo,
     this.notes,
     this.rating,
     required this.visited,
