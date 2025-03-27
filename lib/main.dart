@@ -74,9 +74,21 @@ class MyHomePageState extends State<MyHomePage> {
         // onPageChanged: onPageChanged, //swipe functionality
         children: const [VisitedPage(), WishListPage()],
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 12, right: 12),
+        child: FloatingActionButton(
+          onPressed: () {
+            // TODO: navigate to Add screen or open form
+          },
+          backgroundColor: const Color(0xFF4A90E2), // your primary blue
+          child: const Icon(Icons.add, color: Colors.white),
+          tooltip: 'New Activity',
+        ),
+      ),
       bottomNavigationBar: Stack(
         children: [
           BottomNavigationBar(
+            backgroundColor: Color(0xFFFFFFFF),
             currentIndex: selectedIndex,
             onTap: onTabTapped,
             selectedItemColor: Color(0xFF4A90E2),
