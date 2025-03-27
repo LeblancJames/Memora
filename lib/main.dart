@@ -75,16 +75,19 @@ class MyHomePageState extends State<MyHomePage> {
         children: const [VisitedPage(), WishListPage()],
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 12, right: 12),
+        padding: const EdgeInsets.only(top: 16),
         child: FloatingActionButton(
           onPressed: () {
             // TODO: navigate to Add screen or open form
           },
           backgroundColor: const Color(0xFF4A90E2), // your primary blue
-          child: const Icon(Icons.add, color: Colors.white),
+          shape: const CircleBorder(),
           tooltip: 'New Activity',
+          child: const Icon(Icons.add, color: Colors.white),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
       bottomNavigationBar: Stack(
         children: [
           BottomNavigationBar(
