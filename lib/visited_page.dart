@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:memora/activity_details.dart';
+import 'package:memora/databases/database_service.dart';
+import 'package:memora/models/activity_model.dart';
 
 class VisitedPage extends StatefulWidget {
   const VisitedPage({super.key});
@@ -13,21 +15,29 @@ class _VisitedPageState extends State<VisitedPage> {
   // List<Activity> items = [];
   final TextEditingController searchController = TextEditingController();
   String searchQuery = "";
-  List<String> places = [
-    'Restaraunt',
-    'Restaraunt',
-    'Restaraunt',
-    'Restaraunt',
-    'Restaraunt',
-  ];
+  List<Activity> activities = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadActivities(); //Load items when widget initializes, basically calls the async function we create here
+  }
+
+  Future<void> loadActivities() async {
+    List<Activity> fetchedActivities = await getActivities();
+    setState(() {
+      activities =
+          fetchedActivities; //Update UI when data is ready, changes the variable list to fetched items
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final filteredPlaces =
-        places
+    final filteredActivities =
+        activities
             .where(
               (place) =>
-                  place.toLowerCase().contains(searchQuery.toLowerCase()),
+                  place.name.toLowerCase().contains(searchQuery.toLowerCase()),
             )
             .toList();
 
@@ -109,7 +119,7 @@ class _VisitedPageState extends State<VisitedPage> {
             padding: EdgeInsets.only(top: 12),
             color: Color(0xFFFAFAFA),
             child: ListView.builder(
-              itemCount: filteredPlaces.length,
+              itemCount: filteredActivities.length,
               itemBuilder: (BuildContext context, int index) {
                 return Column(
                   children: [
@@ -120,14 +130,15 @@ class _VisitedPageState extends State<VisitedPage> {
                           context,
                           MaterialPageRoute(
                             builder:
-                                // (context) => Activitydetails(toDoItem: items[index]),
-                                (context) => ActivityDetails(),
+                                (context) => ActivityDetails(
+                                  activity: activities[index],
+                                ),
                           ),
                         );
                       },
                       child: Slidable(
                         // Specify a key if the Slidable is dismissible.
-                        key: ValueKey(filteredPlaces[index]),
+                        key: ValueKey(filteredActivities[index]),
                         // The end action pane is the one at the right or the bottom side.
                         endActionPane: ActionPane(
                           motion: const ScrollMotion(),
@@ -176,11 +187,8 @@ class _VisitedPageState extends State<VisitedPage> {
                                   //   ),
                                   // ),
                                   decoration: BoxDecoration(
-                                    color:
-                                        Colors.blue[200], // 🎨 Your fill color
-                                    shape:
-                                        BoxShape
-                                            .circle, // ✅ Makes it a perfect circle
+                                    color: Colors.blue[200],
+                                    shape: BoxShape.circle,
                                   ),
                                 ),
                                 Padding(
@@ -189,7 +197,7 @@ class _VisitedPageState extends State<VisitedPage> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
-                                        filteredPlaces[index],
+                                        filteredActivities[index].name,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,
@@ -202,7 +210,8 @@ class _VisitedPageState extends State<VisitedPage> {
                                         ),
                                       ),
                                       Text(
-                                        filteredPlaces[index],
+                                        filteredActivities[index].location ??
+                                            "",
                                         style: TextStyle(
                                           color: const Color.fromARGB(
                                             255,

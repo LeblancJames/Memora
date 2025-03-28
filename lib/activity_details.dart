@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:memora/models/activity_model.dart';
 
 class ActivityDetails extends StatefulWidget {
-  const ActivityDetails({super.key});
+  final Activity? activity;
+  const ActivityDetails({super.key, this.activity});
 
   @override
   State<ActivityDetails> createState() => _ActivityDetailsState();
 }
 
 class _ActivityDetailsState extends State<ActivityDetails> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController notesController = TextEditingController();
+  var nameController = TextEditingController();
+  var locationController = TextEditingController();
+  var notesController = TextEditingController();
   var selectedCategoryIndex = List<bool>.filled(5, false);
   var selectedCategoryIndexTwo = List<bool>.filled(5, false);
 
-  double rating = 0;
+  int rating = 0;
   bool isVisited = false;
 
   final List<IconData> categories = [
@@ -31,7 +34,31 @@ class _ActivityDetailsState extends State<ActivityDetails> {
     Icons.photo, // Other
   ];
 
-  void selectRating(double index) {
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(
+      text: widget.activity!.name.toString(),
+    );
+    locationController = TextEditingController(
+      text: widget.activity!.location.toString(),
+    );
+    notesController = TextEditingController(
+      text: widget.activity!.notes.toString(),
+    );
+    selectedCategoryIndex = widget.activity!.categoriesOne.toList();
+    selectedCategoryIndexTwo = widget.activity!.categoriesTwo.toList();
+    rating = widget.activity!.rating.toInt();
+    isVisited = widget.activity!.visited;
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
+  void selectRating(int index) {
     setState(() {
       if (rating == index) {
         rating = 0;
@@ -59,6 +86,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
+              controller: nameController,
               decoration: const InputDecoration(
                 labelText: 'Name',
                 enabledBorder: UnderlineInputBorder(
@@ -70,6 +98,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
             ),
             TextField(
+              controller: locationController,
               decoration: const InputDecoration(
                 labelText: 'Location',
                 enabledBorder: UnderlineInputBorder(

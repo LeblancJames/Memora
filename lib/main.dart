@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:memora/activity_details.dart';
+import 'package:memora/databases/database_service.dart';
 import 'package:memora/visited_page.dart';
 import 'package:memora/wish_list.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
+  WidgetsFlutterBinding.ensureInitialized();
+  buildDummy();
+
   runApp(const MyApp());
 }
 
