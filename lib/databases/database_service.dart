@@ -24,7 +24,7 @@ Future<Database> databaseService() async {
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
-    version: 1,
+    version: 3,
   );
   return database;
 }
@@ -70,7 +70,7 @@ Future<List<Activity>> getActivities() async {
   return activitiesMap.map((map) => Activity.fromMap(map)).toList();
 }
 
-Future<void> updateToDoItem(Activity activity) async {
+Future<void> updateActivity(Activity activity) async {
   final db = await databaseService();
   await db.update(
     'activities',
@@ -80,7 +80,7 @@ Future<void> updateToDoItem(Activity activity) async {
   );
 }
 
-Future<void> deleteToDoItem(int id) async {
+Future<void> deleteActivity(int id) async {
   final db = await databaseService();
   await db.delete('activities', where: 'id = ?', whereArgs: [id]);
 }

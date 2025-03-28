@@ -31,6 +31,14 @@ class _VisitedPageState extends State<VisitedPage> {
     });
   }
 
+  void deleteItems(int id) {
+    deleteActivity(id);
+
+    setState(() {
+      activities.removeWhere((item) => item.id == id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final filteredActivities =
@@ -144,8 +152,10 @@ class _VisitedPageState extends State<VisitedPage> {
                           motion: const ScrollMotion(),
                           children: [
                             SlidableAction(
-                              // onPressed: (context) => deleteItems(items[index]),
-                              onPressed: doNothing,
+                              onPressed:
+                                  (context) =>
+                                      deleteItems(activities[index].id!),
+
                               backgroundColor: const Color(0xFFFE4A49),
                               foregroundColor: const Color.fromARGB(
                                 255,

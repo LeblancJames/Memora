@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memora/activity_details.dart';
 import 'package:memora/databases/database_service.dart';
+import 'package:memora/models/activity_model.dart';
 import 'package:memora/visited_page.dart';
 import 'package:memora/wish_list.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -87,7 +88,21 @@ class MyHomePageState extends State<MyHomePage> {
         child: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const ActivityDetails()),
+              MaterialPageRoute(
+                builder:
+                    (context) => ActivityDetails(
+                      activity: Activity(
+                        id: 0,
+                        name: '',
+                        location: '',
+                        categoriesOne: [false, false, false, false, false],
+                        categoriesTwo: [false, false, false, false, false],
+                        notes: '',
+                        rating: 0,
+                        visited: false,
+                      ),
+                    ),
+              ),
             );
           },
           backgroundColor: const Color(0xFF4A90E2), // your primary blue

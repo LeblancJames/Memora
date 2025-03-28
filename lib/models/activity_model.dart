@@ -4,7 +4,7 @@
 import 'dart:convert';
 
 class Activity {
-  final int id;
+  final int? id;
   final String name;
   final String? location;
   //add photos?
@@ -28,7 +28,7 @@ class Activity {
 
   Map<String, Object?> toMap() {
     return {
-      'id': id,
+      // 'id': id,
       'name': name,
       'location': location,
       'categoriesOne': jsonEncode(categoriesOne),

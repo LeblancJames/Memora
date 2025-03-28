@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memora/databases/database_service.dart';
 import 'package:memora/models/activity_model.dart';
 
 class ActivityDetails extends StatefulWidget {
@@ -66,6 +67,37 @@ class _ActivityDetailsState extends State<ActivityDetails> {
         rating = index;
       }
     });
+  }
+
+  void addActivity() async {
+    Activity newActivity;
+    String name = nameController.text;
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          padding: EdgeInsets.all(30),
+          content: Text("Can't add empty activity"),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      newActivity = Activity(
+        id: widget.activity?.id ?? 0,
+        name: nameController.text,
+        location: locationController.text,
+        categoriesOne: selectedCategoryIndex,
+        categoriesTwo: selectedCategoryIndexTwo,
+        notes: notesController.text,
+        rating: rating,
+        visited: isVisited,
+      );
+      if (newActivity.id == 0) {
+        await insertActivity(newActivity);
+      } else {
+        await updateActivity(newActivity);
+      }
+    }
   }
 
   @override
@@ -251,7 +283,8 @@ class _ActivityDetailsState extends State<ActivityDetails> {
                     padding: EdgeInsets.only(left: 8),
                     child: ElevatedButton(
                       onPressed: () {
-                        // Save logic here
+                        addActivity();
+                        Navigator.pushNamed(context, '/');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4A90E2),
