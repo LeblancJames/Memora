@@ -29,31 +29,31 @@ Future<Database> databaseService() async {
   return database;
 }
 
-void buildDummy() async {
-  // // //dummy db
-  var hike = Activity(
-    id: 1,
-    name: 'hiking',
-    location: 'Canada',
-    categoriesOne: [false, true, false, false, false],
-    categoriesTwo: [false, false, false, false, false],
-    notes: 'abc',
-    rating: 3,
-    visited: true,
-  );
-  await insertActivity(hike);
+// void buildDummy() async {
+//   // // //dummy db
+//   var hike = Activity(
+//     id: 1,
+//     name: 'hiking',
+//     location: 'Canada',
+//     categoriesOne: [false, true, false, false, false],
+//     categoriesTwo: [false, false, false, false, false],
+//     notes: 'abc',
+//     rating: 3,
+//     visited: true,
+//   );
+//   await insertActivity(hike);
 
-  print(await getActivities());
+//   print(await getActivities());
 
-  // grocery = ToDoItem(id: grocery.id, name: grocery.name, description: 'beef');
-  // await updateToDoItem(grocery);
+//   // grocery = ToDoItem(id: grocery.id, name: grocery.name, description: 'beef');
+//   // await updateToDoItem(grocery);
 
-  // print(await getToDoItems());
+//   // print(await getToDoItems());
 
-  // // await deleteToDoItem(grocery.id);
+//   // // await deleteToDoItem(grocery.id);
 
-  // print(await getToDoItems());
-}
+//   // print(await getToDoItems());
+// }
 
 Future<void> insertActivity(Activity activity) async {
   final db = await databaseService();
@@ -64,9 +64,21 @@ Future<void> insertActivity(Activity activity) async {
   );
 }
 
-Future<List<Activity>> getActivities() async {
+Future<List<Activity>> getVisistedActivities() async {
   final db = await databaseService();
-  final List<Map<String, Object?>> activitiesMap = await db.query('activities');
+  final List<Map<String, Object?>> activitiesMap = await db.query(
+    'activities',
+    where: 'visited = 1',
+  );
+  return activitiesMap.map((map) => Activity.fromMap(map)).toList();
+}
+
+Future<List<Activity>> getWishActivities() async {
+  final db = await databaseService();
+  final List<Map<String, Object?>> activitiesMap = await db.query(
+    'activities',
+    where: 'visited = 0',
+  );
   return activitiesMap.map((map) => Activity.fromMap(map)).toList();
 }
 

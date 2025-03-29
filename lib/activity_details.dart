@@ -97,6 +97,8 @@ class _ActivityDetailsState extends State<ActivityDetails> {
       } else {
         await updateActivity(newActivity);
       }
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(context, '/');
     }
   }
 
@@ -284,7 +286,6 @@ class _ActivityDetailsState extends State<ActivityDetails> {
                     child: ElevatedButton(
                       onPressed: () {
                         addActivity();
-                        Navigator.pushNamed(context, '/');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4A90E2),

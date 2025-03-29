@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:memora/activity_details.dart';
 import 'package:memora/databases/database_service.dart';
+import 'package:memora/filter_modal.dart';
 import 'package:memora/models/activity_model.dart';
 
 class VisitedPage extends StatefulWidget {
@@ -12,19 +13,40 @@ class VisitedPage extends StatefulWidget {
 }
 
 class _VisitedPageState extends State<VisitedPage> {
+  final List<IconData> categories = [
+    Icons.restaurant, // Food & Drink
+    Icons.hiking, // Outdoor Adventures
+    Icons.beach_access, // Shopping
+    Icons.theater_comedy, // Entertainment
+    Icons.shopping_bag, // Shopping
+  ];
+  final List<IconData> categoriesSecondRow = [
+    Icons.local_cafe, // Cafe
+    Icons.local_bar, // Bar
+    Icons.account_balance, // Museums/Historical Sites
+    Icons.airplanemode_active, //Travel destinations
+    Icons.photo, // Other
+  ];
+
+  List<Activity> activities = [];
+  List<Activity> filteredActivities = [];
+  late List<bool> selectedCategoryFiltersOne;
+  late List<bool> selectedCategoryFiltersTwo;
   // List<Activity> items = [];
   final TextEditingController searchController = TextEditingController();
   String searchQuery = "";
-  List<Activity> activities = [];
 
   @override
   void initState() {
     super.initState();
     loadActivities(); //Load items when widget initializes, basically calls the async function we create here
+
+    selectedCategoryFiltersOne = List.filled(categories.length, false);
+    selectedCategoryFiltersTwo = List.filled(categoriesSecondRow.length, false);
   }
 
   Future<void> loadActivities() async {
-    List<Activity> fetchedActivities = await getActivities();
+    List<Activity> fetchedActivities = await getVisistedActivities();
     setState(() {
       activities =
           fetchedActivities; //Update UI when data is ready, changes the variable list to fetched items
@@ -36,6 +58,25 @@ class _VisitedPageState extends State<VisitedPage> {
 
     setState(() {
       activities.removeWhere((item) => item.id == id);
+    });
+  }
+
+  void applyFilters() {
+    setState(() {
+      filteredActivities =
+          activities.where((activity) {
+            for (int i = 0; i < selectedCategoryFiltersOne.length; i++) {
+              if (selectedCategoryFiltersOne[i] && activity.categoriesOne[i]) {
+                return true;
+              }
+            }
+            for (int i = 0; i < selectedCategoryFiltersTwo.length; i++) {
+              if (selectedCategoryFiltersTwo[i] && activity.categoriesTwo[i]) {
+                return true;
+              }
+            }
+            return false;
+          }).toList();
     });
   }
 
@@ -99,7 +140,7 @@ class _VisitedPageState extends State<VisitedPage> {
                 icon: const Icon(Icons.sort),
                 tooltip: 'Sort',
                 onPressed: () {
-                  // TODO: Implement sort logic
+                  doNothing(context);
                 },
               ),
             ),
@@ -115,7 +156,24 @@ class _VisitedPageState extends State<VisitedPage> {
                 icon: const Icon(Icons.filter_list),
                 tooltip: 'Filter',
                 onPressed: () {
-                  // TODO: Open filter modal or sheet
+                  showFilterModal(
+                    context: context,
+                    categories: categories,
+                    categoriesTwo: categoriesSecondRow,
+                    selectedFiltersOne: selectedCategoryFiltersOne,
+                    selectedFiltersTwo: selectedCategoryFiltersTwo,
+                    onFilterToggleOne: (index, selected) {
+                      setState(() {
+                        selectedCategoryFiltersOne[index] = selected;
+                      });
+                    },
+                    onFilterToggleTwo: (index, selected) {
+                      setState(() {
+                        selectedCategoryFiltersTwo[index] = selected;
+                      });
+                    },
+                    onApply: applyFilters,
+                  );
                 },
               ),
             ),

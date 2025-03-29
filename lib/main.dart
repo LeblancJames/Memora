@@ -1,17 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:memora/activity_details.dart';
-import 'package:memora/databases/database_service.dart';
+// import 'package:memora/databases/database_service.dart';
 import 'package:memora/models/activity_model.dart';
 import 'package:memora/visited_page.dart';
 import 'package:memora/wish_list.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-void main() {
-  sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;
-  WidgetsFlutterBinding.ensureInitialized();
-  buildDummy();
+void initDatabase() {
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+}
 
+void main() {
+  initDatabase();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -54,17 +60,19 @@ class MyHomePageState extends State<MyHomePage> {
       curve: Curves.ease,
     );
   }
+
   //swipe functionality
-  // void onPageChanged(int index) {
-  //   setState(() {
-  //     selectedIndex = index;
-  //   });
-  // }
+  void onPageChanged(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.white,
         title: Text(
@@ -80,7 +88,7 @@ class MyHomePageState extends State<MyHomePage> {
       ),
       body: PageView(
         controller: pageController,
-        // onPageChanged: onPageChanged, //swipe functionality
+        onPageChanged: onPageChanged, //swipe functionality
         children: const [VisitedPage(), WishListPage()],
       ),
       floatingActionButton: Padding(
