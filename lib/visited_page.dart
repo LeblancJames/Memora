@@ -202,17 +202,13 @@ class _VisitedPageState extends State<VisitedPage> {
                     categoriesTwo: categoriesSecondRow,
                     selectedFiltersOne: selectedCategoryFiltersOne,
                     selectedFiltersTwo: selectedCategoryFiltersTwo,
-                    onFilterToggleOne: (index, selected) {
+                    onApply: (newOne, newTwo) {
                       setState(() {
-                        selectedCategoryFiltersOne[index] = selected;
+                        selectedCategoryFiltersOne = newOne;
+                        selectedCategoryFiltersTwo = newTwo;
+                        applyFilters();
                       });
                     },
-                    onFilterToggleTwo: (index, selected) {
-                      setState(() {
-                        selectedCategoryFiltersTwo[index] = selected;
-                      });
-                    },
-                    onApply: applyFilters,
                   );
                 },
               ),

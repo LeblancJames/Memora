@@ -6,9 +6,7 @@ void showFilterModal({
   required List<IconData> categoriesTwo,
   required List<bool> selectedFiltersOne,
   required List<bool> selectedFiltersTwo,
-  required Function(int index, bool selected) onFilterToggleOne,
-  required Function(int index, bool selected) onFilterToggleTwo,
-  required VoidCallback onApply,
+  required Function(List<bool> newOne, List<bool> newTwo) onApply,
 }) {
   showModalBottomSheet(
     context: context,
@@ -16,6 +14,10 @@ void showFilterModal({
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (context) {
+      // Create temp copies of filters to avoid mutating real state before apply
+      final List<bool> tempFiltersOne = List.from(selectedFiltersOne);
+      final List<bool> tempFiltersTwo = List.from(selectedFiltersTwo);
+
       return StatefulBuilder(
         builder: (context, setModalState) {
           return Padding(
@@ -39,17 +41,16 @@ void showFilterModal({
                       label: Icon(
                         categories[index],
                         color:
-                            selectedFiltersOne[index]
-                                ? Colors.blue
-                                : Colors.black,
+                            tempFiltersOne[index] ? Colors.blue : Colors.black,
                       ),
-                      selected: selectedFiltersOne[index],
+                      selected: tempFiltersOne[index],
                       showCheckmark: false,
                       selectedColor: Colors.blue[100],
                       backgroundColor: Colors.grey[200],
                       onSelected: (selected) {
-                        onFilterToggleOne(index, selected);
-                        setModalState(() {});
+                        setModalState(() {
+                          tempFiltersOne[index] = selected;
+                        });
                       },
                     );
                   }),
@@ -66,17 +67,16 @@ void showFilterModal({
                       label: Icon(
                         categoriesTwo[index],
                         color:
-                            selectedFiltersTwo[index]
-                                ? Colors.blue
-                                : Colors.black,
+                            tempFiltersTwo[index] ? Colors.blue : Colors.black,
                       ),
-                      selected: selectedFiltersTwo[index],
+                      selected: tempFiltersTwo[index],
                       showCheckmark: false,
                       selectedColor: Colors.blue[100],
                       backgroundColor: Colors.grey[200],
                       onSelected: (selected) {
-                        onFilterToggleTwo(index, selected);
-                        setModalState(() {});
+                        setModalState(() {
+                          tempFiltersTwo[index] = selected;
+                        });
                       },
                     );
                   }),
@@ -87,7 +87,7 @@ void showFilterModal({
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      onApply();
+                      onApply(tempFiltersOne, tempFiltersTwo);
                     },
                     child: const Text('Apply Filters'),
                   ),

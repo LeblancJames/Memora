@@ -42,6 +42,7 @@ void showSortModal({
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
+                //spread operator to inject each Activity filter value as a seperate child
                 ...ActivityFilter.values.map((filter) {
                   final isSelected = filter == selectedFilter;
                   return ListTile(
