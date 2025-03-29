@@ -48,8 +48,8 @@ class _VisitedPageState extends State<VisitedPage> {
   Future<void> loadActivities() async {
     List<Activity> fetchedActivities = await getVisistedActivities();
     setState(() {
-      activities =
-          fetchedActivities; //Update UI when data is ready, changes the variable list to fetched items
+      activities = fetchedActivities;
+      applyFilters(); // apply initial filters
     });
   }
 
@@ -59,37 +59,44 @@ class _VisitedPageState extends State<VisitedPage> {
     setState(() {
       activities.removeWhere((item) => item.id == id);
     });
+    applyFilters();
   }
 
   void applyFilters() {
     setState(() {
       filteredActivities =
+          //search bar
           activities.where((activity) {
-            for (int i = 0; i < selectedCategoryFiltersOne.length; i++) {
-              if (selectedCategoryFiltersOne[i] && activity.categoriesOne[i]) {
-                return true;
-              }
-            }
-            for (int i = 0; i < selectedCategoryFiltersTwo.length; i++) {
-              if (selectedCategoryFiltersTwo[i] && activity.categoriesTwo[i]) {
-                return true;
-              }
-            }
-            return false;
+            final matchesSearch = activity.name.toLowerCase().contains(
+              searchQuery.toLowerCase(),
+            );
+            //check for category match
+            final matchesCategory =
+                selectedCategoryFiltersOne.asMap().entries.any((entry) {
+                  //make the selected categories into a key value pair and iterate through the pairs
+                  final i = entry.key;
+                  final selected = entry.value;
+                  //ensure that the value is true for the selected category and for the category list in the activity itself at the specific index
+                  return selected && activity.categoriesOne[i];
+                }) ||
+                selectedCategoryFiltersTwo.asMap().entries.any((entry) {
+                  final i = entry.key;
+                  final selected = entry.value;
+                  return selected && activity.categoriesTwo[i];
+                });
+            //there is an active category
+            final filtersActive =
+                selectedCategoryFiltersOne.contains(true) ||
+                selectedCategoryFiltersTwo.contains(true);
+            //ensure filter is on and then the activity matches the search bar and category filter
+            //if filter is off, then first part is true
+            return (!filtersActive || matchesCategory) && matchesSearch;
           }).toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final filteredActivities =
-        activities
-            .where(
-              (place) =>
-                  place.name.toLowerCase().contains(searchQuery.toLowerCase()),
-            )
-            .toList();
-
     return Column(
       children: [
         // Search Bar
@@ -108,6 +115,7 @@ class _VisitedPageState extends State<VisitedPage> {
                   onChanged: (value) {
                     setState(() {
                       searchQuery = value;
+                      applyFilters();
                     });
                   },
                   decoration: InputDecoration(
