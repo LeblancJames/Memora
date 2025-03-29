@@ -76,7 +76,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           padding: EdgeInsets.all(30),
-          content: Text("Can't add empty activity"),
+          content: Text("Can't add activity without a name"),
           duration: Duration(seconds: 2),
           backgroundColor: Colors.red,
         ),

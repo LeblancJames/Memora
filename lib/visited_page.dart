@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:memora/activity_details.dart';
 import 'package:memora/databases/database_service.dart';
-import 'package:memora/filter_modal.dart';
+import 'package:memora/modals/filter_modal.dart';
+import 'package:memora/modals/sort_modal.dart';
 import 'package:memora/models/activity_model.dart';
 
 class VisitedPage extends StatefulWidget {
@@ -27,12 +28,16 @@ class _VisitedPageState extends State<VisitedPage> {
     Icons.airplanemode_active, //Travel destinations
     Icons.photo, // Other
   ];
-
+  //category filter
   List<Activity> activities = [];
   List<Activity> filteredActivities = [];
   late List<bool> selectedCategoryFiltersOne;
   late List<bool> selectedCategoryFiltersTwo;
-  // List<Activity> items = [];
+
+  //sort
+  ActivityFilter selectedSort = ActivityFilter.nameAZ;
+
+  //search bar
   final TextEditingController searchController = TextEditingController();
   String searchQuery = "";
 
@@ -92,6 +97,24 @@ class _VisitedPageState extends State<VisitedPage> {
             //if filter is off, then first part is true
             return (!filtersActive || matchesCategory) && matchesSearch;
           }).toList();
+      switch (selectedSort) {
+        case ActivityFilter.nameAZ:
+          filteredActivities.sort((a, b) => a.name.compareTo(b.name));
+          break;
+        case ActivityFilter.nameZA:
+          filteredActivities.sort((a, b) => b.name.compareTo(a.name));
+          break;
+        case ActivityFilter.locationAZ:
+          filteredActivities.sort(
+            (a, b) => (a.location ?? '').compareTo(b.location ?? ''),
+          );
+          break;
+        case ActivityFilter.locationZA:
+          filteredActivities.sort(
+            (a, b) => (b.location ?? '').compareTo(a.location ?? ''),
+          );
+          break;
+      }
     });
   }
 
@@ -148,7 +171,16 @@ class _VisitedPageState extends State<VisitedPage> {
                 icon: const Icon(Icons.sort),
                 tooltip: 'Sort',
                 onPressed: () {
-                  doNothing(context);
+                  showSortModal(
+                    context: context,
+                    selectedFilter: selectedSort,
+                    onSelected: (ActivityFilter newFilter) {
+                      setState(() {
+                        selectedSort = newFilter;
+                        applyFilters();
+                      });
+                    },
+                  );
                 },
               ),
             ),

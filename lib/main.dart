@@ -89,7 +89,7 @@ class MyHomePageState extends State<MyHomePage> {
       body: PageView(
         controller: pageController,
         onPageChanged: onPageChanged, //swipe functionality
-        children: const [VisitedPage(), WishListPage()],
+        children: const [WishListPage(), VisitedPage()],
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(top: 16),
@@ -131,12 +131,12 @@ class MyHomePageState extends State<MyHomePage> {
             unselectedItemColor: Color(0xFFBDBDBD),
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.check),
-                label: 'Visited',
-              ),
-              BottomNavigationBarItem(
                 icon: Icon(Icons.bookmark),
                 label: 'Wishlist',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.check),
+                label: 'Visited',
               ),
             ],
           ),
