@@ -18,6 +18,7 @@ void initDatabase() {
 void main() {
   initDatabase();
   WidgetsFlutterBinding.ensureInitialized();
+  // buildDummy();
   runApp(const MyApp());
 }
 
@@ -108,6 +109,7 @@ class MyHomePageState extends State<MyHomePage> {
                         notes: '',
                         rating: 0,
                         visited: false,
+                        photoPaths: [],
                       ),
                     ),
               ),

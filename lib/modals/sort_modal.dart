@@ -65,7 +65,7 @@ void showSortModal({
                       onSelected(filter);
                     },
                   );
-                }).toList(),
+                }),
               ],
             ),
           );

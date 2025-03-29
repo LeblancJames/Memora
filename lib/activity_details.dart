@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:memora/databases/database_service.dart';
 import 'package:memora/models/activity_model.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 class ActivityDetails extends StatefulWidget {
   final Activity? activity;
@@ -16,7 +21,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
   var notesController = TextEditingController();
   var selectedCategoryIndex = List<bool>.filled(5, false);
   var selectedCategoryIndexTwo = List<bool>.filled(5, false);
-
+  final List<File> photos = [];
   int rating = 0;
   bool isVisited = false;
 
@@ -51,6 +56,10 @@ class _ActivityDetailsState extends State<ActivityDetails> {
     selectedCategoryIndexTwo = widget.activity!.categoriesTwo.toList();
     rating = widget.activity!.rating.toInt();
     isVisited = widget.activity!.visited;
+
+    if (widget.activity?.photoPaths != null) {
+      photos.addAll(widget.activity!.photoPaths.map((path) => File(path)));
+    }
   }
 
   @override
@@ -72,6 +81,8 @@ class _ActivityDetailsState extends State<ActivityDetails> {
   void addActivity() async {
     Activity newActivity;
     String name = nameController.text;
+    final imagePaths = photos.map((file) => file.path).toList();
+
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -91,6 +102,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
         notes: notesController.text,
         rating: rating,
         visited: isVisited,
+        photoPaths: imagePaths,
       );
       if (newActivity.id == 0) {
         await insertActivity(newActivity);
@@ -100,6 +112,47 @@ class _ActivityDetailsState extends State<ActivityDetails> {
       // ignore: use_build_context_synchronously
       Navigator.pushNamed(context, '/');
     }
+  }
+
+  Future<void> addPhoto() async {
+    final picker = ImagePicker();
+
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder:
+          (context) => SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.camera_alt),
+                  title: const Text('Take Photo'),
+                  onTap: () => Navigator.pop(context, ImageSource.camera),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.photo),
+                  title: const Text('Choose from Gallery'),
+                  onTap: () => Navigator.pop(context, ImageSource.gallery),
+                ),
+              ],
+            ),
+          ),
+    );
+
+    if (source != null) {
+      final picked = await picker.pickImage(source: source, imageQuality: 80);
+      if (picked != null) {
+        final saved = await _saveImageToAppStorage(File(picked.path));
+        setState(() => photos.add(saved));
+      }
+    }
+  }
+
+  Future<File> _saveImageToAppStorage(File original) async {
+    final appDir = await getApplicationDocumentsDirectory();
+    final fileName = path.basename(original.path);
+    final savedImage = await original.copy('${appDir.path}/$fileName');
+    return savedImage;
   }
 
   @override
@@ -149,8 +202,40 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 16),
-            Row(children: [photoBox(icon: Icons.add)]),
+
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                // Add photo button
+                GestureDetector(
+                  onTap: addPhoto,
+                  child: Container(
+                    width: 72,
+                    height: 72,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(Icons.add, color: Colors.blue),
+                  ),
+                ),
+                // Show selected photos
+                ...photos.map(
+                  (file) => ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.file(
+                      file,
+                      width: 72,
+                      height: 72,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 16),
+
             Text(
               "Category",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),

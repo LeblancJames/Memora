@@ -19,12 +19,17 @@ Future<Database> databaseService() async {
     onCreate: (db, version) {
       // Run the CREATE TABLE statement on the database.
       return db.execute(
-        'CREATE TABLE activities(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, location TEXT, categoriesOne TEXT NOT NULL, categoriesTwo TEXT NOT NULL, notes TEXT, rating INTEGER NOT NULL, visited INTEGER NOT NULL)',
+        'CREATE TABLE activities(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, location TEXT, categoriesOne TEXT NOT NULL, categoriesTwo TEXT NOT NULL, notes TEXT, rating INTEGER NOT NULL, visited INTEGER NOT NULL, photoPaths TEXT)',
       );
+    },
+    onUpgrade: (db, oldVersion, newVersion) async {
+      if (oldVersion < 5) {
+        await db.execute('ALTER TABLE activities ADD COLUMN photoPaths TEXT');
+      }
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
-    version: 3,
+    version: 5,
   );
   return database;
 }
@@ -40,10 +45,11 @@ Future<Database> databaseService() async {
 //     notes: 'abc',
 //     rating: 3,
 //     visited: true,
+//     photoPaths: [],
 //   );
 //   await insertActivity(hike);
 
-//   print(await getActivities());
+//   // print(await getActivities());
 
 //   // grocery = ToDoItem(id: grocery.id, name: grocery.name, description: 'beef');
 //   // await updateToDoItem(grocery);

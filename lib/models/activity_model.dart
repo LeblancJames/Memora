@@ -7,12 +7,12 @@ class Activity {
   final int? id;
   final String name;
   final String? location;
-  //add photos?
   final List<bool> categoriesOne;
   final List<bool> categoriesTwo;
   final String? notes;
   final int rating;
   final bool visited;
+  final List<String> photoPaths;
 
   Activity({
     required this.id,
@@ -24,6 +24,7 @@ class Activity {
     this.notes,
     required this.rating,
     required this.visited,
+    required this.photoPaths,
   });
 
   Map<String, Object?> toMap() {
@@ -36,6 +37,7 @@ class Activity {
       'notes': notes,
       'rating': rating,
       'visited': visited ? 1 : 0,
+      'photoPaths': photoPaths.join(','),
     };
   }
 
@@ -51,6 +53,10 @@ class Activity {
       visited:
           map['visited'] ==
           1, //if visisted equals 1, return true else return false essentially converting back to bool
+      photoPaths:
+          map['photoPaths'] == null || (map['photoPaths'] as String).isEmpty
+              ? []
+              : (map['photoPaths'] as String).split(','),
     );
   }
 
