@@ -14,7 +14,7 @@ void showFilterModal({
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (context) {
-      // Create temp copies of filters to avoid mutating real state before apply
+      // Create temp copies of filters to avoid changing real state before apply
       final List<bool> tempFiltersOne = List.from(selectedFiltersOne);
       final List<bool> tempFiltersTwo = List.from(selectedFiltersTwo);
 
