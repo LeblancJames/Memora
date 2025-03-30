@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:memora/databases/database_service.dart';
+import 'package:memora/fullscreen_photo.dart';
 import 'package:memora/models/activity_model.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -148,6 +149,16 @@ class _ActivityDetailsState extends State<ActivityDetails> {
     }
   }
 
+  void removePhoto(File file) async {
+    setState(() {
+      photos.remove(file);
+    });
+
+    if (await file.exists()) {
+      await file.delete();
+    }
+  }
+
   Future<File> _saveImageToAppStorage(File original) async {
     final appDir = await getApplicationDocumentsDirectory();
     final fileName = path.basename(original.path);
@@ -221,17 +232,31 @@ class _ActivityDetailsState extends State<ActivityDetails> {
                   ),
                 ),
                 // Show selected photos
-                ...photos.map(
-                  (file) => ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(
-                      file,
-                      width: 72,
-                      height: 72,
-                      fit: BoxFit.cover,
+                ...photos.map((file) {
+                  return GestureDetector(
+                    onTap: () async {
+                      final shouldDelete = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => FullScreenPhotoView(file: file),
+                        ),
+                      );
+
+                      if (shouldDelete == true) {
+                        removePhoto(file); // delete from list + disk
+                      }
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(
+                        file,
+                        width: 72,
+                        height: 72,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
               ],
             ),
             const SizedBox(height: 16),

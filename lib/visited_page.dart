@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:memora/activity_details.dart';
@@ -223,6 +225,7 @@ class _VisitedPageState extends State<VisitedPage> {
             child: ListView.builder(
               itemCount: filteredActivities.length,
               itemBuilder: (BuildContext context, int index) {
+                final activity = filteredActivities[index];
                 return Column(
                   children: [
                     //individual items
@@ -281,19 +284,35 @@ class _VisitedPageState extends State<VisitedPage> {
                                 Container(
                                   width: 60,
                                   height: 60,
-                                  // decoration: BoxDecoration(
-                                  //   shape: BoxShape.circle,
-                                  //   image: DecorationImage(
-                                  //     image: AssetImage(
-                                  //       'assets/my_image.jpg',
-                                  //     ), // or NetworkImage
-                                  //     fit: BoxFit.cover,
-                                  //   ),
-                                  // ),
                                   decoration: BoxDecoration(
-                                    color: Colors.blue[200],
                                     shape: BoxShape.circle,
+                                    image:
+                                        activity.photoPaths.isNotEmpty
+                                            ? DecorationImage(
+                                              image: FileImage(
+                                                File(activity.photoPaths[0]),
+                                              ),
+                                              fit: BoxFit.cover,
+                                            )
+                                            : null, // no image? use a background + icon instead
+                                    color:
+                                        Colors
+                                            .grey[300], // background for placeholder
                                   ),
+                                  child:
+                                      activity.photoPaths.isEmpty
+                                          ? const Icon(
+                                            Icons
+                                                .place, // or Icons.person, Icons.photo, etc.
+                                            size: 32,
+                                            color: Colors.white70,
+                                          )
+                                          : null,
+
+                                  // decoration: BoxDecoration(
+                                  //   color: Colors.blue[200],
+                                  //   shape: BoxShape.circle,
+                                  // ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(top: 24, right: 24),
