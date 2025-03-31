@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum ActivityFilter { nameAZ, nameZA, locationAZ, locationZA }
+enum ActivityFilter { nameAZ, nameZA, locationAZ, locationZA, rating }
 
 //change variables to something more UI friendly by using switch, simply do variable_name.label to get the label extension
 extension ActivityFilterExtension on ActivityFilter {
@@ -14,6 +14,8 @@ extension ActivityFilterExtension on ActivityFilter {
         return 'Location A-Z';
       case ActivityFilter.locationZA:
         return 'Location Z-A';
+      case ActivityFilter.rating:
+        return 'Rating';
     }
   }
 }

@@ -134,7 +134,7 @@ class MyHomePageState extends State<MyHomePage> {
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.bookmark),
-                label: 'Wishlist',
+                label: 'Yet To Go',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.check),

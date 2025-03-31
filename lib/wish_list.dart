@@ -115,6 +115,8 @@ class _WishListPageState extends State<WishListPage> {
           filteredActivities.sort(
             (a, b) => (b.location ?? '').compareTo(a.location ?? ''),
           );
+        case ActivityFilter.rating:
+          filteredActivities.sort((b, a) => (a.rating).compareTo(b.rating));
           break;
       }
     });
@@ -236,7 +238,7 @@ class _WishListPageState extends State<WishListPage> {
                           MaterialPageRoute(
                             builder:
                                 (context) => ActivityDetails(
-                                  activity: activities[index],
+                                  activity: filteredActivities[index],
                                 ),
                           ),
                         );

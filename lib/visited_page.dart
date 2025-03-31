@@ -115,6 +115,8 @@ class _VisitedPageState extends State<VisitedPage> {
           filteredActivities.sort(
             (a, b) => (b.location ?? '').compareTo(a.location ?? ''),
           );
+        case ActivityFilter.rating:
+          filteredActivities.sort((b, a) => (a.rating).compareTo(a.rating));
           break;
       }
     });
@@ -236,7 +238,7 @@ class _VisitedPageState extends State<VisitedPage> {
                           MaterialPageRoute(
                             builder:
                                 (context) => ActivityDetails(
-                                  activity: activities[index],
+                                  activity: filteredActivities[index],
                                 ),
                           ),
                         );
