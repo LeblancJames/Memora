@@ -41,6 +41,7 @@ class FullScreenPhotoView extends StatelessWidget {
               );
 
               if (confirm == true) {
+                // ignore: use_build_context_synchronously
                 Navigator.pop(context, true); // return value to delete
               }
             },
