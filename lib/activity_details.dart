@@ -7,6 +7,7 @@ import 'package:memora/fullscreen_photo.dart';
 import 'package:memora/models/activity_model.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:reorderables/reorderables.dart';
 
 class ActivityDetails extends StatefulWidget {
   final Activity? activity;
@@ -214,11 +215,28 @@ class _ActivityDetailsState extends State<ActivityDetails> {
             ),
             const SizedBox(height: 16),
 
-            Wrap(
+            ReorderableWrap(
               spacing: 12,
               runSpacing: 12,
+              needsLongPressDraggable: true,
+              buildDraggableFeedback: (context, constraints, child) {
+                return Material(
+                  color: Colors.transparent,
+                  elevation: 8,
+                  child: child,
+                );
+              },
+              onReorder: (oldIndex, newIndex) {
+                setState(() {
+                  // Prevent dragging the add button (index 0)
+                  if (oldIndex == 0 || newIndex == 0) return;
+                  if (newIndex > oldIndex) newIndex -= 1;
+                  final moved = photos.removeAt(oldIndex - 1);
+                  photos.insert(newIndex - 1, moved);
+                });
+              },
               children: [
-                // Add photo button
+                // Add button
                 GestureDetector(
                   onTap: addPhoto,
                   child: Container(
@@ -231,34 +249,35 @@ class _ActivityDetailsState extends State<ActivityDetails> {
                     child: const Icon(Icons.add, color: Colors.blue),
                   ),
                 ),
-                // Show selected photos
-                ...photos.map((file) {
-                  return GestureDetector(
-                    onTap: () async {
-                      final shouldDelete = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => FullScreenPhotoView(file: file),
-                        ),
-                      );
 
-                      if (shouldDelete == true) {
-                        removePhoto(file); // delete from list + disk
-                      }
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        file,
-                        width: 72,
-                        height: 72,
-                        fit: BoxFit.cover,
+                // Draggable photos
+                for (var file in photos)
+                  SizedBox(
+                    key: ValueKey(file.path),
+                    width: 72,
+                    height: 72,
+                    child: GestureDetector(
+                      onTap: () async {
+                        final shouldDelete = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => FullScreenPhotoView(file: file),
+                          ),
+                        );
+                        if (shouldDelete == true) {
+                          setState(() => photos.remove(file));
+                          removePhoto(file);
+                        }
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(file, fit: BoxFit.cover),
                       ),
                     ),
-                  );
-                }),
+                  ),
               ],
             ),
+
             const SizedBox(height: 16),
 
             Text(
