@@ -76,16 +76,20 @@ class MyHomePageState extends State<MyHomePage> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.white,
-        title: Text(
-          widget.title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 22,
-            color: Color(0xFF212121),
-            letterSpacing: 0.5,
-          ),
+        // title: Text(
+        //   widget.title,
+        //   style: const TextStyle(
+        //     fontWeight: FontWeight.w600,
+        //     fontSize: 22,
+        //     color: Color(0xFF212121),
+        //     letterSpacing: 0.5,
+        //   ),
+        // ),
+        title: Image.asset(
+          'lib/assets/images/memora_title.png', // replace with your logo path
+          height: 80, // adjust height as needed
+          width: 180, // adjust width as needed
         ),
-        toolbarHeight: 64,
       ),
       body: PageView(
         controller: pageController,

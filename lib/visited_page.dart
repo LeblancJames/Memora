@@ -134,7 +134,7 @@ class _VisitedPageState extends State<VisitedPage> {
                 padding: const EdgeInsets.only(
                   left: 24,
                   right: 16,
-                  top: 0,
+                  top: 8,
                   bottom: 16,
                 ),
                 child: TextField(
