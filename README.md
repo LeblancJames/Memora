@@ -1,16 +1,29 @@
-# memora
+# Memora
 
-A new Flutter project.
+Memora is a Flutter-based mobile app designed to help users track and organize places they’ve visited or want to visit. It supports tagging, photo uploads, personal notes, and a clean, minimalist UI.
+
+## Features
+
+- Track places you've visited or want to visit
+- Organize by categories (e.g., restaurants, hiking spots)
+- Add custom tags, star ratings, and text notes
+- Upload and reorder photos in a drag-and-drop grid
+- Share a place as a stylish image card (no branding or watermark)
+- Local storage with optional cloud sync support (planned)
+- Notifications for reminders and saved alerts (planned)
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+## Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- [Flutter SDK](https://flutter.dev/docs/get-started/install)
+- Dart SDK
+- Android Studio or Visual Studio Code
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+git clone https://github.com/LeblancJames/Memora.git
+cd Memora
+flutter pub get
+flutter run
